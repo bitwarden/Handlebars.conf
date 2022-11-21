@@ -25,7 +25,7 @@ Source Handlebars template: `test.conf.hbs`
 Run command
 
 ```
-hb --config hb.yaml
+hbs --config hb.yaml
 ```
 
 Destination output: `test.conf`
