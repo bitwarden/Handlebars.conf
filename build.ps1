@@ -35,10 +35,10 @@ function GetOsRids() {
     $rids
 }
 
-function BuildBinary() {
+function BuildSelfContainedBinary() {
     $rids = GetOsRids
     foreach ($rid in $rids) {
-        $o = "$output\bin\$rid"
+        $o = "$output\sc\$rid"
         Remove-Item -LiteralPath $o -Force -Recurse -ErrorAction Ignore
 
         echo "### Building binary for $rid to $o"
@@ -50,6 +50,20 @@ function BuildBinary() {
     }
 }
 
+function BuildFrameworkDependentBinary() {
+    $rids = GetOsRids
+    foreach ($rid in $rids) {
+        $o = "$output\fd\$rid"
+        Remove-Item -LiteralPath $o -Force -Recurse -ErrorAction Ignore
+
+        echo "### Building binary for $rid to $o"
+        dotnet publish -c Release -o $o -r $rid `
+            -p:PublishReadyToRun=true -p:PublishSingleFile=true `
+            -p:DebugType=None -p:DebugSymbols=false `
+            --self-contained false -p:IncludeNativeLibrariesForSelfExtract=true
+    }
+}
+
 function Clean() {
     Remove-Item -LiteralPath $output -Force -Recurse -ErrorAction Ignore
 }
@@ -58,8 +72,11 @@ function Clean() {
 
 echo "## Building Handlebars.conf ($task)"
 
-if ($task -eq "binary") {
-    BuildBinary
+if ($task -eq "binary-sc") {
+    BuildSelfContainedBinary
+}
+elseif ($task -eq "binary-fd") {
+    BuildFrameworkDependentBinary
 }
 elseif ($task -eq "clean") {
     Clean
