@@ -11,7 +11,7 @@ class Program
     {
         var configFileOption = new Option<FileInfo>(
             name: "--config",
-            description: "The file to read and display on the console.");
+            description: "The config file listing templates and options for Handlebars to process.");
 
         var rootCommand = new RootCommand("Handlebars templates for config files.");
         rootCommand.AddOption(configFileOption);
