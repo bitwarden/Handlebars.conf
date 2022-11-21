@@ -45,7 +45,8 @@ function BuildBinary() {
         dotnet publish -c Release -o $o -r $rid `
             -p:PublishReadyToRun=true -p:PublishSingleFile=true `
             -p:DebugType=None -p:DebugSymbols=false -p:PublishTrimmed=true `
-            --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
+            --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true
     }
 }
 
