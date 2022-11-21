@@ -40,6 +40,18 @@ Destination output: `test.conf`
 </Section>
 ```
 
+### Multiple templates
+
+```
+templates:
+  - src: foo.conf.hbs
+    dest: foo.conf
+  - src: bar.conf.hbs
+    dest: bar.conf
+  - src: baz.conf.hbs
+    dest: baz.conf
+```
+
 ## Handlebars templating
 
 Learn more about using Handlebars templates here: https://handlebarsjs.com
