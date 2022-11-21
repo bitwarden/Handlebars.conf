@@ -10,7 +10,7 @@ Download the latest release binary for your system from the [Releases page](http
 
 ### Basic usage
 
-Handlebars config file: `hb.yaml`
+Handlebars config file: `hbs.yaml`
 
 ```
 templates:
@@ -29,7 +29,7 @@ Source Handlebars template: `test.conf.hbs`
 Run command
 
 ```
-hbs --config hb.yaml
+hbs --config hbs.yaml
 ```
 
 Destination output: `test.conf`
