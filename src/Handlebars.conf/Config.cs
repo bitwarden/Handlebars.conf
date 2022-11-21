@@ -1,4 +1,6 @@
-﻿namespace Handlebars.conf;
+﻿using YamlDotNet.Serialization;
+
+namespace Handlebars.conf;
 
 internal class Config
 {
@@ -7,7 +9,9 @@ internal class Config
 
     internal class Template
     {
+        [YamlMember(Alias = "src")]
         public string Source { get; set; }
+        [YamlMember(Alias = "dest")]
         public string Destination { get; set; }
     }
 }
