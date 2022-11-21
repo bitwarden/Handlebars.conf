@@ -2,6 +2,10 @@
 
 Handlebars templates for config files.
 
+## Install
+
+Download the latest release binary for your system from the [Releases page](https://github.com/kspearrin/Handlebars.conf/releases).
+
 ## Examples
 
 ### Basic usage
