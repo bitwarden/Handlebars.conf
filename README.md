@@ -14,8 +14,8 @@ Handlebars config file: `hb.yaml`
 
 ```
 templates:
-  - source: test.conf.hbs
-    destination: test.conf
+  - src: test.conf.hbs
+    dest: test.conf
 ```
 
 Source Handlebars template: `test.conf.hbs`
