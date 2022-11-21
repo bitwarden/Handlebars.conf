@@ -39,3 +39,7 @@ Destination output: `test.conf`
     kyle
 </Section>
 ```
+
+## Handlebars templating
+
+Learn more about using Handlebars templates here: https://handlebarsjs.com
