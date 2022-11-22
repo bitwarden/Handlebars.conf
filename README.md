@@ -56,9 +56,11 @@ templates:
 
 Learn more about using Handlebars templates here: https://handlebarsjs.com
 
-## Handlebars.Net Helpers
+## Handlebars Helpers
 
 You can load Handlebars helpers from the [Handlebars.Net Helpers library](https://github.com/Handlebars-Net/Handlebars.Net.Helpers) by specifying helper categories to load in your config file.
+
+Config
 
 ```yaml
 helper_categories:
@@ -69,6 +71,8 @@ templates:
     dest: test.conf
 ```
 
+Template `test.conf.hbs`
+
 ```
 <Section>
     {{String.Append env.username " is awesome."}}
@@ -76,6 +80,8 @@ templates:
     {{Math.Add 4 5}}
 </Section>
 ```
+
+Result `test.conf`
 
 ```
 <Section>
