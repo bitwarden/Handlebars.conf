@@ -88,8 +88,8 @@ Template `test.conf.hbs`
 {{String.Append env.username " is awesome."}}
 {{String.Lowercase "SOMETHING"}}
 {{String.Coalesce "" "     " "value"}}
-{{#each (String.Split "1,2,3" ",")}}
-Number: {{.}}
+{{#each (String.Split "1,2, 3" ",")}}
+Number: {{String Trim .}}
 {{/each}}
 ```
 
