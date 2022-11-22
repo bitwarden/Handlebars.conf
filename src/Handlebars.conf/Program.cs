@@ -121,13 +121,6 @@ class Program
                             return arg;
                         }
                     }
-                    else if (arg.GetType() == typeof(object[]))
-                    {
-                        if (((object[])arg).Length > 0)
-                        {
-                            return arg;
-                        }
-                    }
                     else
                     {
                         return arg;
