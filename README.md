@@ -39,7 +39,7 @@ Source Handlebars template: `test.conf.hbs`
 Run command
 
 ```bash
-hbs --config hbs.yaml
+hbs -c hbs.yaml
 ```
 
 Destination output: `test.conf`
