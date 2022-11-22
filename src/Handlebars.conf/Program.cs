@@ -100,5 +100,41 @@ class Program
                 });
             }
         }
+
+        context.RegisterHelper("coalesce", (context, arguments) =>
+        {
+            foreach (var arg in arguments)
+            {
+                if (arg != null)
+                {
+                    if (arg is bool b)
+                    {
+                        if (b)
+                        {
+                            return arg;
+                        }
+                    }
+                    else if (arg is string s)
+                    {
+                        if (!string.IsNullOrWhiteSpace(s))
+                        {
+                            return arg;
+                        }
+                    }
+                    else if (arg.GetType() == typeof(object[]))
+                    {
+                        if (((object[])arg).Length > 0)
+                        {
+                            return arg;
+                        }
+                    }
+                    else
+                    {
+                        return arg;
+                    }
+                }
+            }
+            return null;
+        });
     }
 }
