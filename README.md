@@ -6,6 +6,16 @@ Handlebars templates for config files.
 
 Download the latest release binary for your system from the [Releases page](https://github.com/kspearrin/Handlebars.conf/releases).
 
+```sh
+curl -L -o hbs.zip https://github.com/kspearrin/Handlebars.conf/releases/download/v1.0.0/hbs_linux-x64.zip
+unzip hbs.zip -d /usr/local/bin && rm hbs.zip
+chmod +x /usr/local/bin/hbs
+
+hbs --help
+```
+
+NOTE: Release binaries with the `_dotnet` suffix are smaller in size, but require the .NET Core runtime to be installed on the host machine.
+
 ## Examples
 
 ### Basic Usage
@@ -20,7 +30,7 @@ templates:
 
 Source Handlebars template: `test.conf.hbs`
 
-```
+```hbs
 <Section>
     {{env.username}}
 </Section>
@@ -73,7 +83,7 @@ templates:
 
 Template `test.conf.hbs`
 
-```
+```hbs
 <Section>
     {{String.Append env.username " is awesome."}}
     {{String.Lowercase "SOMETHING"}}
