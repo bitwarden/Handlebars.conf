@@ -8,7 +8,7 @@ Download the latest release binary for your system from the [Releases page](http
 
 ## Examples
 
-### Basic usage
+### Basic Usage
 
 Handlebars config file: `hbs.yaml`
 
@@ -40,7 +40,7 @@ Destination output: `test.conf`
 </Section>
 ```
 
-### Multiple templates
+### Multiple Templates
 
 ```yaml
 templates:
@@ -52,7 +52,7 @@ templates:
     dest: baz.conf
 ```
 
-## Handlebars templating
+## Handlebars Templating
 
 Learn more about using Handlebars templates here: https://handlebarsjs.com
 
