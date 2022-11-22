@@ -22,6 +22,7 @@ jobs:
         run: |
           dotnet --info
           echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref2: ${{github.ref}}"
           echo "GitHub ref name: $GITHUB_REF_NAME"
           echo "GitHub event: $GITHUB_EVENT"
 
