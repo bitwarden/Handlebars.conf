@@ -41,7 +41,7 @@ function BuildSelfContainedBinary() {
         $o = "$output\sc\$rid"
         Remove-Item -LiteralPath $o -Force -Recurse -ErrorAction Ignore
 
-        echo "### Building binary for $rid to $o"
+        echo "### Building self contained binary for $rid to $o"
         dotnet publish -c Release -o $o -r $rid `
             -p:PublishReadyToRun=true -p:PublishSingleFile=true `
             -p:DebugType=None -p:DebugSymbols=false -p:PublishTrimmed=true `
@@ -56,7 +56,7 @@ function BuildFrameworkDependentBinary() {
         $o = "$output\fd\$rid"
         Remove-Item -LiteralPath $o -Force -Recurse -ErrorAction Ignore
 
-        echo "### Building binary for $rid to $o"
+        echo "### Building framework dependent binary for $rid to $o"
         dotnet publish -c Release -o $o -r $rid `
             -p:PublishReadyToRun=true -p:PublishSingleFile=true `
             -p:DebugType=None -p:DebugSymbols=false `
