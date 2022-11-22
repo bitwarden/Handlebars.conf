@@ -16,6 +16,7 @@ class Program
             name: "--config",
             () => new FileInfo("/etc/hbs/config.yaml"),
             description: "The config file listing options and templates for Handlebars to process.");
+        configFileOption.AddAlias("-c");
 
         var rootCommand = new RootCommand("Handlebars templates for config files.");
         rootCommand.AddOption(configFileOption);

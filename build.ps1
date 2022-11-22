@@ -1,7 +1,8 @@
 param (
     [string] $task = "",
     [string] $os = "",
-    [string] $output = ""
+    [string] $output = "",
+    [string] $ref = ""
 )
 
 # Setup
@@ -11,6 +12,16 @@ $dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if ($output -eq "") {
     $output = "${dir}\build"
 }
+
+$assemblyVersion = "1.0.0"
+$versionSuffix = "dev"
+$version = "$assemblyVersion-$versionSuffix"
+if ($ref -ne "") {
+    $assemblyVersion = $ref.Trim("v")
+    $version = $assemblyVersion
+}
+
+echo "Version: $version"
 
 $win_rids = @("win-x64", "win-x86")
 $lin_rids = @("linux-x64", "linux-musl-x64", "linux-arm", "linux-arm64")
@@ -46,7 +57,8 @@ function BuildSelfContainedBinary() {
             -p:PublishReadyToRun=true -p:PublishSingleFile=true `
             -p:DebugType=None -p:DebugSymbols=false -p:PublishTrimmed=true `
             --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true `
-            -p:EnableCompressionInSingleFile=true
+            -p:EnableCompressionInSingleFile=true `
+            -p:AssemblyVersion=$assemblyVersion -p:Version=$version -p:VersionSuffix=$versionSuffix
     }
 }
 
@@ -60,7 +72,8 @@ function BuildFrameworkDependentBinary() {
         dotnet publish -c Release -o $o -r $rid `
             -p:PublishReadyToRun=true -p:PublishSingleFile=true `
             -p:DebugType=None -p:DebugSymbols=false `
-            --self-contained false -p:IncludeNativeLibrariesForSelfExtract=true
+            --self-contained false -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:AssemblyVersion=$assemblyVersion -p:Version=$version -p:VersionSuffix=$versionSuffix
     }
 }
 
