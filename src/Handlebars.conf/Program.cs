@@ -4,6 +4,8 @@ using YamlDotNet.Serialization;
 using System.Collections;
 using HandlebarsDotNet.Helpers.Enums;
 using HandlebarsDotNet.Helpers;
+using HandlebarsDotNet;
+using YamlDotNet.Core.Tokens;
 
 namespace Handlebars.conf;
 
@@ -28,11 +30,7 @@ class Program
 
             // Set up Handlebars
             var handlebarsContext = HandlebarsDotNet.Handlebars.Create();
-            if (config.HelperCategories != null && config.HelperCategories.Length > 0)
-            {
-                HandlebarsHelpers.Register(handlebarsContext,
-                    config.HelperCategories.Select(c => (Category)Enum.Parse(typeof(Category), c)).ToArray());
-            }
+            RegisterHandlebarsHelpers(handlebarsContext, config);
 
             // Process templates
             foreach (var template in config.Templates)
@@ -80,5 +78,27 @@ class Program
             table.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
         }
         model["env"] = table;
+    }
+
+    static void RegisterHandlebarsHelpers(IHandlebars context, Config config)
+    {
+        if (config.HelperCategories != null && config.HelperCategories.Length > 0)
+        {
+            var categories = config.HelperCategories
+                .Select(c => (Category)Enum.Parse(typeof(Category), c)).ToArray();
+            HandlebarsHelpers.Register(context, categories);
+
+            if (categories.Contains(Category.String))
+            {
+                // Overload String.Split given that it returns a JSON string rather than an iterable object
+                // https://github.com/Handlebars-Net/Handlebars.Net.Helpers/issues/53
+                context.RegisterHelper("String.Split", (context, arguments) =>
+                {
+                    var value = arguments[0] as string;
+                    var separator = arguments[1] as string;
+                    return value.Split(separator);
+                });
+            }
+        }
     }
 }
