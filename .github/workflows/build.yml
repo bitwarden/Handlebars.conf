@@ -21,10 +21,9 @@ jobs:
       - name: Print environment
         run: |
           dotnet --info
-          echo "GitHub ref: $GITHUB_REF"
-          echo "GitHub ref2: ${{github.ref}}"
-          echo "GitHub ref name: $GITHUB_REF_NAME"
-          echo "GitHub event: $GITHUB_EVENT"
+          echo "GitHub ref: ${{github.ref}}"
+          echo "GitHub ref name: ${{github.ref_name}}"
+          echo "GitHub event: ${{github.event}}"
 
       - name: Restore/Clean service
         run: |
@@ -36,16 +35,16 @@ jobs:
       - name: Publish service (self contained)
         shell: pwsh
         run: |
-          ./build.ps1 -task binary-sc -os win -ref $GITHUB_REF_NAME
-          ./build.ps1 -task binary-sc -os lin -ref $GITHUB_REF_NAME
-          ./build.ps1 -task binary-sc -os mac -ref $GITHUB_REF_NAME
+          ./build.ps1 -task binary-sc -os win -ref ${{github.ref_name}}
+          ./build.ps1 -task binary-sc -os lin -ref ${{github.ref_name}}
+          ./build.ps1 -task binary-sc -os mac -ref ${{github.ref_name}}
 
       - name: Publish service (framework dependent)
         shell: pwsh
         run: |
-          ./build.ps1 -task binary-fd -os win -ref $GITHUB_REF_NAME
-          ./build.ps1 -task binary-fd -os lin -ref $GITHUB_REF_NAME
-          ./build.ps1 -task binary-fd -os mac -ref $GITHUB_REF_NAME
+          ./build.ps1 -task binary-fd -os win -ref ${{github.ref_name}}
+          ./build.ps1 -task binary-fd -os lin -ref ${{github.ref_name}}
+          ./build.ps1 -task binary-fd -os mac -ref ${{github.ref_name}}
 
       - name: Upload Self Contained artifacts (win-x64)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
