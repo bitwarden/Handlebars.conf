@@ -98,36 +98,29 @@ class Program
                     var separator = arguments[1] as string;
                     return value.Split(separator);
                 });
+
+                context.RegisterHelper("String.Coalesce", (context, arguments) =>
+                {
+                    foreach (var arg in arguments)
+                    {
+                        if (arg != null)
+                        {
+                            if (arg is string s)
+                            {
+                                if (!string.IsNullOrWhiteSpace(s))
+                                {
+                                    return arg;
+                                }
+                            }
+                            else
+                            {
+                                return arg;
+                            }
+                        }
+                    }
+                    return null;
+                });
             }
         }
-
-        context.RegisterHelper("coalesce", (context, arguments) =>
-        {
-            foreach (var arg in arguments)
-            {
-                if (arg != null)
-                {
-                    if (arg is bool b)
-                    {
-                        if (b)
-                        {
-                            return arg;
-                        }
-                    }
-                    else if (arg is string s)
-                    {
-                        if (!string.IsNullOrWhiteSpace(s))
-                        {
-                            return arg;
-                        }
-                    }
-                    else
-                    {
-                        return arg;
-                    }
-                }
-            }
-            return null;
-        });
     }
 }
