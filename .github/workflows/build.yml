@@ -28,15 +28,19 @@ jobs:
           echo "Clean"
           dotnet clean -c "Release"
 
-      - name: Publish service
+      - name: Publish service (self contained)
+        shell: pwsh
+        run: |
+          ./build.ps1 -task binary-sc -os win
+          ./build.ps1 -task binary-sc -os lin
+          ./build.ps1 -task binary-sc -os mac
+
+      - name: Publish service (framework dependent)
         shell: pwsh
         run: |
           ./build.ps1 -task binary-fd -os win
-          ./build.ps1 -task binary-sc -os win
           ./build.ps1 -task binary-fd -os lin
-          ./build.ps1 -task binary-sc -os lin
           ./build.ps1 -task binary-fd -os mac
-          ./build.ps1 -task binary-sc -os mac
 
       - name: Upload Self Contained artifacts (win-x64)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
