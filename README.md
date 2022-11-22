@@ -84,19 +84,21 @@ templates:
 Template `test.conf.hbs`
 
 ```hbs
-<Section>
-    {{String.Append env.username " is awesome."}}
-    {{String.Lowercase "SOMETHING"}}
-    {{Math.Add 4 5}}
-</Section>
+{{String.Append env.username " is awesome."}}
+{{String.Lowercase "SOMETHING"}}
+{{Math.Add 4 5}}
+{{#each (String.Split "1,2,3" ",")}}
+Number: {{.}}
+{{/each}}
 ```
 
 Result `test.conf`
 
 ```
-<Section>
-    kyle is awesome.
-    something
-    9
-</Section>
+kyle is awesome.
+something
+9
+Number: 1
+Number: 2
+Number: 3
 ```
