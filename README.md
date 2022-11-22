@@ -84,9 +84,10 @@ templates:
 Template `test.conf.hbs`
 
 ```hbs
+{{Math.Add 4 5}}
 {{String.Append env.username " is awesome."}}
 {{String.Lowercase "SOMETHING"}}
-{{Math.Add 4 5}}
+{{String.Coalesce "" "     " "value"}}
 {{#each (String.Split "1,2,3" ",")}}
 Number: {{.}}
 {{/each}}
@@ -95,9 +96,10 @@ Number: {{.}}
 Result `test.conf`
 
 ```
+9
 kyle is awesome.
 something
-9
+value
 Number: 1
 Number: 2
 Number: 3
