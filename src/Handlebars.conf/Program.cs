@@ -2,6 +2,8 @@
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using System.Collections;
+using HandlebarsDotNet.Helpers.Enums;
+using HandlebarsDotNet.Helpers;
 
 namespace Handlebars.conf;
 
@@ -9,26 +11,41 @@ class Program
 {
     static async Task<int> Main(string[] args)
     {
+        // Set up command and parameters
         var configFileOption = new Option<FileInfo>(
             name: "--config",
-            description: "The config file listing templates and options for Handlebars to process.");
+            () => new FileInfo("/etc/hbs/config.yaml"),
+            description: "The config file listing options and templates for Handlebars to process.");
 
         var rootCommand = new RootCommand("Handlebars templates for config files.");
         rootCommand.AddOption(configFileOption);
 
         rootCommand.SetHandler(async (configFile) =>
         {
+            // Read config yaml file
             var config = await ReadConfigFileAsync(configFile);
+
+            // Set up Handlebars
+            var handlebarsContext = HandlebarsDotNet.Handlebars.Create();
+            if (config.HelperCategories != null && config.HelperCategories.Length > 0)
+            {
+                HandlebarsHelpers.Register(handlebarsContext,
+                    config.HelperCategories.Select(c => (Category)Enum.Parse(typeof(Category), c)).ToArray());
+            }
+
+            // Process templates
             foreach (var template in config.Templates)
             {
                 var model = GetHandlebarsModel(config, template);
-                var source = await File.ReadAllTextAsync(template.Source);
-                var sourceTemplate = HandlebarsDotNet.Handlebars.Compile(source);
+                var source = string.IsNullOrWhiteSpace(template.SourceText) ?
+                    await File.ReadAllTextAsync(template.SourceFile) : template.SourceText;
+                var sourceTemplate = handlebarsContext.Compile(source);
                 var result = sourceTemplate(model);
                 await File.WriteAllTextAsync(template.Destination, result);
             }
         }, configFileOption);
 
+        // Go
         return await rootCommand.InvokeAsync(args);
     }
 
