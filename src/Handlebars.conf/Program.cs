@@ -99,6 +99,21 @@ class Program
                     return value.Split(separator);
                 });
 
+                // Overload String equality helpers since they do not allow null values
+                context.RegisterHelper("String.Equal", (context, arguments) =>
+                {
+                    var value1 = arguments[0] as string;
+                    var value2 = arguments[1] as string;
+                    return value1 == value2;
+                });
+
+                context.RegisterHelper("String.NotEqual", (context, arguments) =>
+                {
+                    var value1 = arguments[0] as string;
+                    var value2 = arguments[1] as string;
+                    return value1 != value2;
+                });
+
                 context.RegisterHelper("String.Coalesce", (context, arguments) =>
                 {
                     foreach (var arg in arguments)
