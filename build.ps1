@@ -2,7 +2,8 @@ param (
     [string] $task = "",
     [string] $os = "",
     [string] $output = "",
-    [string] $ref = ""
+    [string] $ref = "",
+    [string] $event = ""
 )
 
 # Setup
@@ -16,7 +17,7 @@ if ($output -eq "") {
 $assemblyVersion = "1.0.0"
 $versionSuffix = "dev"
 $version = "$assemblyVersion-$versionSuffix"
-if ($ref -match "(?<Version>\d+\.\d+\.?(\d+)?)") {
+if ($event -eq "release" -and $ref -match "(?<Version>\d+\.\d+\.?(\d+)?)") {
     $assemblyVersion = $ref.Trim("v")
     $version = $assemblyVersion
 }

@@ -23,7 +23,7 @@ jobs:
           dotnet --info
           echo "GitHub ref: $Env:GITHUB_REF"
           echo "GitHub ref name: $Env:GITHUB_REF_NAME"
-          echo "GitHub event: $Env:GITHUB_EVENT"
+          echo "GitHub event: $Env:GITHUB_EVENT_NAME"
 
       - name: Restore/Clean service
         run: |
@@ -35,16 +35,16 @@ jobs:
       - name: Publish service (self contained)
         shell: pwsh
         run: |
-          ./build.ps1 -task binary-sc -os win -ref $Env:GITHUB_REF_NAME
-          ./build.ps1 -task binary-sc -os lin -ref $Env:GITHUB_REF_NAME
-          ./build.ps1 -task binary-sc -os mac -ref $Env:GITHUB_REF_NAME
+          ./build.ps1 -task binary-sc -os win -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
+          ./build.ps1 -task binary-sc -os lin -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
+          ./build.ps1 -task binary-sc -os mac -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
 
       - name: Publish service (framework dependent)
         shell: pwsh
         run: |
-          ./build.ps1 -task binary-fd -os win -ref $Env:GITHUB_REF_NAME
-          ./build.ps1 -task binary-fd -os lin -ref $Env:GITHUB_REF_NAME
-          ./build.ps1 -task binary-fd -os mac -ref $Env:GITHUB_REF_NAME
+          ./build.ps1 -task binary-fd -os win -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
+          ./build.ps1 -task binary-fd -os lin -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
+          ./build.ps1 -task binary-fd -os mac -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
 
       - name: Upload Self Contained artifacts (win-x64)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
