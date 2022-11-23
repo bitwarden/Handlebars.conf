@@ -16,7 +16,7 @@ if ($output -eq "") {
 $assemblyVersion = "1.0.0"
 $versionSuffix = "dev"
 $version = "$assemblyVersion-$versionSuffix"
-if ($ref -ne "" && $ref.StartsWith("v")) {
+if ($ref -match "(?<Version>\d+\.\d+\.?(\d+)?)") {
     $assemblyVersion = $ref.Trim("v")
     $version = $assemblyVersion
 }
