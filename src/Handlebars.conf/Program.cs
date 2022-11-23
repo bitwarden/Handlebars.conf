@@ -114,6 +114,20 @@ class Program
                     return value1 != value2;
                 });
 
+                // Add new helpers
+
+                context.RegisterHelper("String.IsNullOrWhitespace", (context, arguments) =>
+                {
+                    var value = arguments[0] as string;
+                    return string.IsNullOrWhiteSpace(value);
+                });
+
+                context.RegisterHelper("String.IsNotNullOrWhitespace", (context, arguments) =>
+                {
+                    var value = arguments[0] as string;
+                    return !string.IsNullOrWhiteSpace(value);
+                });
+
                 context.RegisterHelper("String.Coalesce", (context, arguments) =>
                 {
                     foreach (var arg in arguments)
