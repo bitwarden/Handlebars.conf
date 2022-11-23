@@ -8,8 +8,8 @@ Download the latest release binary for your system from the [Releases page](http
 
 ```sh
 curl -L -o hbs.zip https://github.com/kspearrin/Handlebars.conf/releases/download/v1.0.0/hbs_linux-x64.zip
-unzip hbs.zip -d /usr/local/bin && rm hbs.zip
-chmod +x /usr/local/bin/hbs
+sudo unzip hbs.zip -d /usr/local/bin && rm hbs.zip
+sudo chmod +x /usr/local/bin/hbs
 
 hbs --help
 ```
