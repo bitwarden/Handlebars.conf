@@ -28,7 +28,9 @@ templates:
     dest: test.conf
 ```
 
-Source Handlebars template: `test.conf.hbs`
+Source Handlebars template: `test.conf.hbs`.
+
+Note: Environment variables are available under the `env` property.
 
 ```hbs
 <Section>
