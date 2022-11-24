@@ -6,6 +6,8 @@ Handlebars templates for config files.
 
 Download the latest release binary for your system from the [Releases page](https://github.com/kspearrin/Handlebars.conf/releases). Note that there are different binaries for various architectures on Linux, Alpine, macOS, and Windows.
 
+Linux x64 example:
+
 ```sh
 curl -L -o hbs.zip https://github.com/kspearrin/Handlebars.conf/releases/download/v1.3.0/hbs_linux-x64.zip
 sudo unzip hbs.zip -d /usr/local/bin && rm hbs.zip
