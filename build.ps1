@@ -25,7 +25,7 @@ if ($event -eq "release" -and $ref -match "(?<Version>\d+\.\d+\.?(\d+)?)") {
 echo "Version: $version"
 
 $win_rids = @("win-x64", "win-x86")
-$lin_rids = @("linux-x64", "linux-musl-x64", "linux-arm", "linux-arm64")
+$lin_rids = @("linux-x64", "linux-arm", "linux-arm64", "linux-musl-x64", "linux-musl-arm", "linux-musl-arm64")
 $mac_rids = @("osx-x64", "osx.11.0-arm64", "osx.12-arm64")
 
 # Functions
