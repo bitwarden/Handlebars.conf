@@ -74,10 +74,10 @@ jobs:
           path: build/sc/linux-arm64
           if-no-files-found: error
 
-      - name: Upload Self Contained artifacts (linux-arm)
+      - name: Upload Self Contained artifacts (linux-armv7)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: hbs_linux-arm
+          name: hbs_linux-armv7
           path: build/sc/linux-arm
           if-no-files-found: error
 
@@ -88,10 +88,10 @@ jobs:
           path: build/sc/linux-musl-x64
           if-no-files-found: error
 
-      - name: Upload Self Contained artifacts (alpine-arm)
+      - name: Upload Self Contained artifacts (alpine-armv7)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: hbs_alpine-arm
+          name: hbs_alpine-armv7
           path: build/sc/linux-musl-arm
           if-no-files-found: error
 
@@ -151,10 +151,10 @@ jobs:
           path: build/fd/linux-arm64
           if-no-files-found: error
 
-      - name: Upload Framework Dependent artifacts (linux-arm)
+      - name: Upload Framework Dependent artifacts (linux-armv7)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: hbs_linux-arm_dotnet
+          name: hbs_linux-armv7_dotnet
           path: build/fd/linux-arm
           if-no-files-found: error
 
@@ -165,10 +165,10 @@ jobs:
           path: build/fd/linux-musl-x64
           if-no-files-found: error
 
-      - name: Upload Framework Dependent artifacts (alpine-arm)
+      - name: Upload Framework Dependent artifacts (alpine-armv7)
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
-          name: hbs_alpine-arm_dotnet
+          name: hbs_alpine-armv7_dotnet
           path: build/fd/linux-musl-arm
           if-no-files-found: error
 
