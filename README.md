@@ -7,7 +7,7 @@ Handlebars templates for config files.
 Download the latest release binary for your system from the [Releases page](https://github.com/kspearrin/Handlebars.conf/releases).
 
 ```sh
-curl -L -o hbs.zip https://github.com/kspearrin/Handlebars.conf/releases/download/v1.1.0/hbs_linux-x64.zip
+curl -L -o hbs.zip https://github.com/kspearrin/Handlebars.conf/releases/download/v1.2.0/hbs_linux-x64.zip
 sudo unzip hbs.zip -d /usr/local/bin && rm hbs.zip
 sudo chmod +x /usr/local/bin/hbs
 
@@ -87,22 +87,36 @@ Template `test.conf.hbs`
 
 ```hbs
 {{Math.Add 4 5}}
+
+{{#if (String.IsNotNullOrWhitespace env.username)}}
 {{String.Append env.username " is awesome."}}
-{{String.Lowercase "SOMETHING"}}
-{{String.Coalesce "" "     " "value"}}
+{{/if}}
+
+{{String.Coalesce "" "     " "value" " " "value2"}}
+
 {{#each (String.Split "1,2, 3" ",")}}
 Number: {{String Trim .}}
 {{/each}}
+
+{{#if (String.Equal env.username "tom")}}
+user is tom.
+{{else}}
+user is {{String.Uppercase env.username}}.
+{{/if}}
 ```
 
 Result `test.conf`
 
 ```
 9
+
 kyle is awesome.
-something
+
 value
+
 Number: 1
 Number: 2
 Number: 3
+
+user is KYLE.
 ```
