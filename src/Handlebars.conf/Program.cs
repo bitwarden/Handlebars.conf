@@ -90,15 +90,6 @@ class Program
 
             if (categories.Contains(Category.String))
             {
-                // Overload String.Split given that it returns a JSON string rather than an iterable object
-                // https://github.com/Handlebars-Net/Handlebars.Net.Helpers/issues/53
-                context.RegisterHelper("String.Split", (context, arguments) =>
-                {
-                    var value = arguments[0] as string;
-                    var separator = arguments[1] as string;
-                    return value.Split(separator);
-                });
-
                 // Overload String equality helpers since they do not allow null values
                 context.RegisterHelper("String.Equal", (context, arguments) =>
                 {
@@ -115,18 +106,6 @@ class Program
                 });
 
                 // Add new helpers
-
-                context.RegisterHelper("String.IsNullOrWhitespace", (context, arguments) =>
-                {
-                    var value = arguments[0] as string;
-                    return string.IsNullOrWhiteSpace(value);
-                });
-
-                context.RegisterHelper("String.IsNotNullOrWhitespace", (context, arguments) =>
-                {
-                    var value = arguments[0] as string;
-                    return !string.IsNullOrWhiteSpace(value);
-                });
 
                 context.RegisterHelper("String.Coalesce", (context, arguments) =>
                 {
