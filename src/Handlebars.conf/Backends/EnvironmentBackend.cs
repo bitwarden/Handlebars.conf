@@ -2,12 +2,12 @@
 
 namespace Handlebars.conf.Backends;
 
-internal class Environment : IBackend
+internal class EnvironmentBackend : IBackend
 {
     public void LoadBackend(Dictionary<string, object> model, Config config, Config.Template template)
     {
         var envTable = new Hashtable();
-        foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables())
+        foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
         {
             envTable.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
         }

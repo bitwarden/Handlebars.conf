@@ -78,7 +78,7 @@ class Program
         // Need to lowercase all hash table key names due to bug here:
         // https://github.com/Handlebars-Net/Handlebars.Net/issues/521
         var envTable = new Hashtable();
-        foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables())
+        foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
         {
             envTable.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
         }
@@ -99,7 +99,7 @@ class Program
     {
         return backend switch
         {
-            BackendType.Environment => new Backends.Environment(),
+            BackendType.Environment => new EnvironmentBackend(),
             _ => null,
         };
     }
