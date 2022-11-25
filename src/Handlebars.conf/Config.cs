@@ -16,5 +16,7 @@ internal class Config
         public string SourceText { get; set; }
         [YamlMember(Alias = "dest")]
         public string Destination { get; set; }
+        public string[] Keys { get; set; }
+        public BackendType? Backend { get; set; }
     }
 }

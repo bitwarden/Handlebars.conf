@@ -5,6 +5,7 @@ using System.Collections;
 using HandlebarsDotNet.Helpers.Enums;
 using HandlebarsDotNet.Helpers;
 using HandlebarsDotNet;
+using Handlebars.conf.Backends;
 
 namespace Handlebars.conf;
 
@@ -60,7 +61,11 @@ class Program
     static IDictionary<string, object> GetHandlebarsModel(Config config, Config.Template template)
     {
         var model = new Dictionary<string, object>();
-        // TODO: Load model from various config sources
+        if (template.Backend.HasValue)
+        {
+            var backend = ResolveBackend(template.Backend.Value);
+            backend?.LoadBackend(model, config, template);
+        }
         if (config.LoadEnvironmentVariables)
         {
             AddEnvironmentVariablesToModel(model);
@@ -72,12 +77,12 @@ class Program
     {
         // Need to lowercase all hash table key names due to bug here:
         // https://github.com/Handlebars-Net/Handlebars.Net/issues/521
-        var table = new Hashtable();
-        foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
+        var envTable = new Hashtable();
+        foreach (DictionaryEntry e in System.Environment.GetEnvironmentVariables())
         {
-            table.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
+            envTable.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
         }
-        model["env"] = table;
+        model["env"] = envTable;
     }
 
     static void RegisterHandlebarsHelpers(IHandlebars context, Config config)
@@ -88,5 +93,14 @@ class Program
                 .Select(c => (Category)Enum.Parse(typeof(Category), c)).ToArray();
             HandlebarsHelpers.Register(context, categories);
         }
+    }
+
+    static IBackend ResolveBackend(BackendType backend)
+    {
+        return backend switch
+        {
+            BackendType.Environment => new Backends.Environment(),
+            _ => null,
+        };
     }
 }
