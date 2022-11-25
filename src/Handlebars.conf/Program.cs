@@ -5,7 +5,6 @@ using System.Collections;
 using HandlebarsDotNet.Helpers.Enums;
 using HandlebarsDotNet.Helpers;
 using HandlebarsDotNet;
-using YamlDotNet.Core.Tokens;
 
 namespace Handlebars.conf;
 
@@ -16,7 +15,8 @@ class Program
         // Set up command and parameters
         var configFileOption = new Option<FileInfo>(
             name: "--config",
-            () => new FileInfo("/etc/hbs/config.yaml"),
+            () => File.Exists("/etc/hbs/config.yml") ? new FileInfo("/etc/hbs/config.yml") :
+                new FileInfo("/etc/hbs/config.yaml"),
             description: "The config file listing options and templates for Handlebars to process.");
         configFileOption.AddAlias("-c");
 
