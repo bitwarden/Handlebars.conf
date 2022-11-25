@@ -87,48 +87,6 @@ class Program
             var categories = config.HelperCategories
                 .Select(c => (Category)Enum.Parse(typeof(Category), c)).ToArray();
             HandlebarsHelpers.Register(context, categories);
-
-            if (categories.Contains(Category.String))
-            {
-                // Overload String equality helpers since they do not allow null values
-                context.RegisterHelper("String.Equal", (context, arguments) =>
-                {
-                    var value1 = arguments[0] as string;
-                    var value2 = arguments[1] as string;
-                    return value1 == value2;
-                });
-
-                context.RegisterHelper("String.NotEqual", (context, arguments) =>
-                {
-                    var value1 = arguments[0] as string;
-                    var value2 = arguments[1] as string;
-                    return value1 != value2;
-                });
-
-                // Add new helpers
-
-                context.RegisterHelper("String.Coalesce", (context, arguments) =>
-                {
-                    foreach (var arg in arguments)
-                    {
-                        if (arg != null)
-                        {
-                            if (arg is string s)
-                            {
-                                if (!string.IsNullOrWhiteSpace(s))
-                                {
-                                    return arg;
-                                }
-                            }
-                            else
-                            {
-                                return arg;
-                            }
-                        }
-                    }
-                    return null;
-                });
-            }
         }
     }
 }
