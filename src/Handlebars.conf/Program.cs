@@ -61,7 +61,7 @@ class Program
     static IDictionary<string, object> GetHandlebarsModel(Config config, Config.Template template)
     {
         var model = new Dictionary<string, object>();
-        if (template.Backend.HasValue)
+        if (template.Backend.HasValue && template.Keys != null)
         {
             var backend = ResolveBackend(template.Backend.Value);
             backend?.LoadBackend(model, config, template);
