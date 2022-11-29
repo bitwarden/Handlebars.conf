@@ -122,3 +122,7 @@ Number: 3
 
 user is KYLE.
 ```
+
+### Real World Example
+
+You can see this tool in use with Bitwarden's Nginx config here: https://github.com/bitwarden/server/tree/master/docker-unified/hbs
