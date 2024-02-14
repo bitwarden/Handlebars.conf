@@ -46,22 +46,12 @@ jobs:
           file: src/Handlebars.conf/Handlebars.conf.csproj
 
       - name: Download all Release artifacts
-        if: ${{ inputs.release_type != 'Dry Run' }}
         uses: bitwarden/gh-actions/download-artifacts@main
         with:
           workflow: build.yml
           path: artifacts
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
-
-      - name: Dry Run - Download all artifacts
-        if: ${{ inputs.release_type == 'Dry Run' }}
-        uses: bitwarden/gh-actions/download-artifacts@main
-        with:
-          workflow: build.yml
-          path: artifacts
-          workflow_conclusion: success
-          branch: main
 
       - name: List artifacts
         run: ls -R artifacts/
