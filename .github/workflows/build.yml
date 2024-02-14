@@ -68,7 +68,7 @@ jobs:
           path: build/sc/${{ matrix.rid }}
           if-no-files-found: error
 
-      - name: Build Self Contained Binary
+      - name: Build Framework Dependent Binary
         env:
           ASSEMBLY_VERSION: "1.0.0"
           RID: ${{ matrix.rid }}
@@ -83,7 +83,7 @@ jobs:
           cd $OUTPUT_DIR
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
-          mv -- "$FILENAME" "hbs_$RID$SUFFIX"
+          mv -- "$FILENAME" "hbs_$RID_dotnet$SUFFIX"
 
       - name: Upload Framework Dependent artifact (${{ matrix.rid }})
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
