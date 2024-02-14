@@ -17,15 +17,14 @@ jobs:
         include:
           - rid: win-x64
           - rid: win-x86
+          - rid: win-arm64
           - rid: linux-x64
           - rid: linux-arm
           - rid: linux-arm64
           - rid: linux-musl-x64
-          - rid: linux-musl-arm
           - rid: linux-musl-arm64
           - rid: osx-x64
-          - rid: osx.11.0-arm64
-          - rid: osx.12-arm64
+          - rid: osx-arm64
     steps:
       - name: Checkout repo
         uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
