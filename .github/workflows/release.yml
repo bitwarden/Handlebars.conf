@@ -1,0 +1,13 @@
+---
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stub:
+    name: Stub job
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Stub step
+        run: exit 0
