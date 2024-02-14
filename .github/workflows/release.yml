@@ -64,7 +64,7 @@ jobs:
           branch: main
 
       - name: List artifacts
-        run: ls -alh artifacts/
+        run: ls -R artifacts/
 
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
