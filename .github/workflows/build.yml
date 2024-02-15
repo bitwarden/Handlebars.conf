@@ -3,18 +3,28 @@
 name: Build
 
 on:
-  release:
-    types:
-      - published
+  pull_request:
   push:
-    branches-ignore:
-      - 'gh-pages'
   workflow_dispatch:
 
 jobs:
-  build-artifacts:
-    name: Build artifacts
-    runs-on: windows-2022
+  build-self-contained:
+    name: Build Self Contained Artifacts
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: win-x64
+          - rid: win-x86
+          - rid: win-arm64
+          - rid: linux-x64
+          - rid: linux-arm
+          - rid: linux-arm64
+          - rid: linux-musl-x64
+          - rid: linux-musl-arm64
+          - rid: osx-x64
+          - rid: osx-arm64
     steps:
       - name: Checkout repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -22,9 +32,9 @@ jobs:
       - name: Print environment
         run: |
           dotnet --info
-          echo "GitHub ref: $Env:GITHUB_REF"
-          echo "GitHub ref name: $Env:GITHUB_REF_NAME"
-          echo "GitHub event: $Env:GITHUB_EVENT_NAME"
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub ref name: $GITHUB_REF_NAME"
+          echo "GitHub event: $GITHUB_EVENT_NAME"
 
       - name: Restore/Clean service
         run: |
@@ -32,171 +42,54 @@ jobs:
           dotnet restore
           echo "Clean"
           dotnet clean -c "Release"
-
-      - name: Publish service (self contained)
-        shell: pwsh
+      
+      - name: Build Self Contained Binary
+        env:
+          RID: ${{ matrix.rid }}
         run: |
-          ./build.ps1 -task binary-sc -os win -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
-          ./build.ps1 -task binary-sc -os lin -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
-          ./build.ps1 -task binary-sc -os mac -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
+          OUTPUT_DIR="$(pwd)/build/sc/$RID"
+          echo "### Building self contained binary for $RID to $OUTPUT_DIR"
+          dotnet publish -c Release -p:PublishDir=$OUTPUT_DIR -r $RID \
+            -p:PublishReadyToRun=true -p:PublishSingleFile=true \
+            -p:DebugType=None -p:DebugSymbols=false -p:PublishTrimmed=true \
+            --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true
+          cd $OUTPUT_DIR
+          FILENAME=$(ls hbs*)
+          SUFFIX=${FILENAME#hbs}
+          NEW_FILENAME="hbs_${RID}${SUFFIX}"
+          mv -- "$FILENAME" "$NEW_FILENAME"
+          zip -j hbs_${RID}.zip $NEW_FILENAME
+          rm $NEW_FILENAME
 
-      - name: Publish service (framework dependent)
-        shell: pwsh
+      - name: Upload Self Contained artifact (${{ matrix.rid }})
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: hbs_${{ matrix.rid }}
+          path: build/sc/${{ matrix.rid }}
+          if-no-files-found: error
+
+      - name: Build Framework Dependent Binary
+        env:
+          RID: ${{ matrix.rid }}
         run: |
-          ./build.ps1 -task binary-fd -os win -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
-          ./build.ps1 -task binary-fd -os lin -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
-          ./build.ps1 -task binary-fd -os mac -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
+          OUTPUT_DIR="$(pwd)/build/fd/$RID"
+          echo "### Building framework dependent binary for $RID to $OUTPUT_DIR"
+          dotnet publish -c Release -p:PublishDir=$OUTPUT_DIR -r $RID \
+            -p:PublishReadyToRun=true -p:PublishSingleFile=true \
+            -p:DebugType=None -p:DebugSymbols=false \
+            --self-contained false -p:IncludeNativeLibrariesForSelfExtract=true
+          cd $OUTPUT_DIR
+          FILENAME=$(ls hbs*)
+          SUFFIX=${FILENAME#hbs}
+          NEW_FILENAME="hbs_${RID}_dotnet${SUFFIX}"
+          mv -- "$FILENAME" "$NEW_FILENAME"
+          zip -j hbs_${RID}_dotnet.zip $NEW_FILENAME
+          rm $NEW_FILENAME
 
-      - name: Upload Self Contained artifacts (win-x64)
+      - name: Upload Framework Dependent artifact (${{ matrix.rid }})
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
-          name: hbs_win-x64
-          path: build/sc/win-x64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (win-x86)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_win-x86
-          path: build/sc/win-x86
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (linux-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_linux-x64
-          path: build/sc/linux-x64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (linux-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_linux-arm64
-          path: build/sc/linux-arm64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (linux-armv7)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_linux-armv7
-          path: build/sc/linux-arm
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (alpine-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_alpine-x64
-          path: build/sc/linux-musl-x64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (alpine-armv7)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_alpine-armv7
-          path: build/sc/linux-musl-arm
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (alpine-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_alpine-arm64
-          path: build/sc/linux-musl-arm64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (osx-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_osx-x64
-          path: build/sc/osx-x64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (osx.12-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_osx.12-arm64
-          path: build/sc/osx.12-arm64
-          if-no-files-found: error
-
-      - name: Upload Self Contained artifacts (osx.11.0-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_osx.11.0-arm64
-          path: build/sc/osx.11.0-arm64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (win-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_win-x64_dotnet
-          path: build/fd/win-x64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (win-x86)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_win-x86_dotnet
-          path: build/fd/win-x86
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (linux-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_linux-x64_dotnet
-          path: build/fd/linux-x64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (linux-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_linux-arm64_dotnet
-          path: build/fd/linux-arm64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (linux-armv7)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_linux-armv7_dotnet
-          path: build/fd/linux-arm
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (alpine-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_alpine-x64_dotnet
-          path: build/fd/linux-musl-x64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (alpine-armv7)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_alpine-armv7_dotnet
-          path: build/fd/linux-musl-arm
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (alpine-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_alpine-arm64_dotnet
-          path: build/fd/linux-musl-arm64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (osx-x64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_osx-x64_dotnet
-          path: build/fd/osx-x64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (osx.12-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_osx.12-arm64_dotnet
-          path: build/fd/osx.12-arm64
-          if-no-files-found: error
-
-      - name: Upload Framework Dependent artifacts (osx.11.0-arm64)
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: hbs_osx.11.0-arm64_dotnet
-          path: build/fd/osx.11.0-arm64
+          name: hbs_${{ matrix.rid }}_dotnet
+          path: build/fd/${{ matrix.rid }}
           if-no-files-found: error

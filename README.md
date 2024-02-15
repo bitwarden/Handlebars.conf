@@ -4,12 +4,12 @@ Handlebars templates for config files.
 
 ## Install
 
-Download the latest release binary for your system from the [Releases page](https://github.com/kspearrin/Handlebars.conf/releases). Note that there are different binaries for various architectures on Linux, Alpine, macOS, and Windows.
+Download the latest release binary for your system from the [Releases page](https://github.com/bitwarden/Handlebars.conf/releases). Note that there are different binaries for various architectures on Linux, macOS, and Windows.
 
 Linux x64 example:
 
 ```sh
-curl -L -o hbs.zip https://github.com/kspearrin/Handlebars.conf/releases/download/v1.3.0/hbs_linux-x64.zip
+curl -L -o hbs.zip https://github.com/bitwarden/Handlebars.conf/releases/download/v2024.2.0/hbs_linux-x64.zip
 sudo unzip hbs.zip -d /usr/local/bin && rm hbs.zip
 sudo chmod +x /usr/local/bin/hbs
 
@@ -125,4 +125,4 @@ user is KYLE.
 
 ### Real World Example
 
-You can see this tool in use with Bitwarden's Nginx config here: https://github.com/bitwarden/server/tree/master/docker-unified/hbs
+You can see this tool in use with Bitwarden Unified's NGINX config here: https://github.com/bitwarden/self-host/tree/main/docker-unified/hbs
