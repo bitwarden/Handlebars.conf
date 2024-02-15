@@ -58,7 +58,7 @@ jobs:
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
           ls -R
-          mv -- "$FILENAME" "hbs_$RID$SUFFIX"
+          mv -- "$FILENAME" "hbs_${RID}${SUFFIX}"
           ls -R
 
       - name: Upload Self Contained artifact (${{ matrix.rid }})
@@ -82,7 +82,7 @@ jobs:
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
           ls -R
-          mv -- "$FILENAME" "hbs_$RID_dotnet$SUFFIX"
+          mv -- "$FILENAME" "hbs_${RID}_dotnet${SUFFIX}"
           ls -R
 
       - name: Upload Framework Dependent artifact (${{ matrix.rid }})
