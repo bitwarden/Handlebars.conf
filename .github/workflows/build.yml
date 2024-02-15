@@ -48,154 +48,154 @@ jobs:
           ./build.ps1 -task binary-fd -os mac -ref $Env:GITHUB_REF_NAME -event $Env:GITHUB_EVENT_NAME
 
       - name: Upload Self Contained artifacts (win-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_win-x64
           path: build/sc/win-x64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (win-x86)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_win-x86
           path: build/sc/win-x86
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (linux-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_linux-x64
           path: build/sc/linux-x64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (linux-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_linux-arm64
           path: build/sc/linux-arm64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (linux-armv7)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_linux-armv7
           path: build/sc/linux-arm
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (alpine-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_alpine-x64
           path: build/sc/linux-musl-x64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (alpine-armv7)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_alpine-armv7
           path: build/sc/linux-musl-arm
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (alpine-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_alpine-arm64
           path: build/sc/linux-musl-arm64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (osx-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_osx-x64
           path: build/sc/osx-x64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (osx.12-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_osx.12-arm64
           path: build/sc/osx.12-arm64
           if-no-files-found: error
 
       - name: Upload Self Contained artifacts (osx.11.0-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_osx.11.0-arm64
           path: build/sc/osx.11.0-arm64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (win-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_win-x64_dotnet
           path: build/fd/win-x64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (win-x86)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_win-x86_dotnet
           path: build/fd/win-x86
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (linux-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_linux-x64_dotnet
           path: build/fd/linux-x64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (linux-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_linux-arm64_dotnet
           path: build/fd/linux-arm64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (linux-armv7)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_linux-armv7_dotnet
           path: build/fd/linux-arm
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (alpine-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_alpine-x64_dotnet
           path: build/fd/linux-musl-x64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (alpine-armv7)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_alpine-armv7_dotnet
           path: build/fd/linux-musl-arm
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (alpine-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_alpine-arm64_dotnet
           path: build/fd/linux-musl-arm64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (osx-x64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_osx-x64_dotnet
           path: build/fd/osx-x64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (osx.12-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_osx.12-arm64_dotnet
           path: build/fd/osx.12-arm64
           if-no-files-found: error
 
       - name: Upload Framework Dependent artifacts (osx.11.0-arm64)
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: hbs_osx.11.0-arm64_dotnet
           path: build/fd/osx.11.0-arm64
