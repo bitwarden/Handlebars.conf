@@ -45,13 +45,11 @@ jobs:
       
       - name: Build Self Contained Binary
         env:
-          ASSEMBLY_VERSION: "1.0.0"
           RID: ${{ matrix.rid }}
-          VERSION_SUFFIX: "dev"
         run: |
           OUTPUT_DIR="$(pwd)/build/sc/$RID"
           echo "### Building self contained binary for $RID to $OUTPUT_DIR"
-          dotnet publish -c Release -o $OUTPUT_DIR -r $RID \
+          dotnet publish -c Release -p:PublishDir=$OUTPUT_DIR -r $RID \
             -p:PublishReadyToRun=true -p:PublishSingleFile=true \
             -p:DebugType=None -p:DebugSymbols=false -p:PublishTrimmed=true \
             --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true \
@@ -72,13 +70,11 @@ jobs:
 
       - name: Build Framework Dependent Binary
         env:
-          ASSEMBLY_VERSION: "1.0.0"
           RID: ${{ matrix.rid }}
-          VERSION_SUFFIX: "dev"
         run: |
           OUTPUT_DIR="$(pwd)/build/fd/$RID"
           echo "### Building framework dependent binary for $RID to $OUTPUT_DIR"
-          dotnet publish -c Release -o $OUTPUT_DIR -r $RID \
+          dotnet publish -c Release -p:PublishDir=$OUTPUT_DIR -r $RID \
             -p:PublishReadyToRun=true -p:PublishSingleFile=true \
             -p:DebugType=None -p:DebugSymbols=false \
             --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
