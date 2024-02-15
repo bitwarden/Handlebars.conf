@@ -9,6 +9,7 @@ on:
   push:
     branches-ignore:
       - 'gh-pages'
+  workflow_dispatch:
 
 jobs:
   build-artifacts:
