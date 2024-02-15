@@ -5,9 +5,6 @@ run-name: Release ${{ inputs.release_type }} v${{ inputs.release_version }}
 on:
   workflow_dispatch:
     inputs:
-      release_version:
-        description: "Release Version"
-        required: true
       release_type:
         description: "Release Options"
         required: true
@@ -21,8 +18,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-22.04
-    outputs:
-      release-version: ${{ steps.version.outputs.version }}
     steps:
       - name: Branch check
         if: ${{ inputs.release_type != 'Dry Run' }}
@@ -62,18 +57,29 @@ jobs:
         env:
           PKG_VERSION: ${{ steps.version.outputs.version }}
         with:
-          artifacts: "apps/cli/bw-windows-${{ env.PKG_VERSION }}.zip,
-                      apps/cli/bw-windows-sha256-${{ env.PKG_VERSION }}.txt,
-                      apps/cli/bw-macos-${{ env.PKG_VERSION }}.zip,
-                      apps/cli/bw-macos-sha256-${{ env.PKG_VERSION }}.txt,
-                      apps/cli/bw-linux-${{ env.PKG_VERSION }}.zip,
-                      apps/cli/bw-linux-sha256-${{ env.PKG_VERSION }}.txt,
-                      apps/cli/bitwarden-cli.${{ env.PKG_VERSION }}.nupkg,
-                      apps/cli/bw_${{ env.PKG_VERSION }}_amd64.snap,
-                      apps/cli/bw-snap-sha256-${{ env.PKG_VERSION }}.txt"
+          artifacts: "artifacts/hbs_linux-arm,
+            artifacts/hbs_linux-arm64,
+            artifacts/hbs_linux-arm64_dotnet,
+            artifacts/hbs_linux-arm_dotnet,
+            artifacts/hbs_linux-musl-arm64,
+            artifacts/hbs_linux-musl-arm64_dotnet,
+            artifacts/hbs_linux-musl-x64,
+            artifacts/hbs_linux-musl-x64_dotnet,
+            artifacts/hbs_linux-x64,
+            artifacts/hbs_linux-x64_dotnet,
+            artifacts/hbs_osx-arm64,
+            artifacts/hbs_osx-arm64_dotnet,
+            artifacts/hbs_osx-x64,
+            artifacts/hbs_osx-x64_dotnet,
+            artifacts/hbs_win-arm64.exe,
+            artifacts/hbs_win-arm64_dotnet.exe,
+            artifacts/hbs_win-x64.exe,
+            artifacts/hbs_win-x64_dotnet.exe,
+            artifacts/hbs_win-x86.exe,
+            artifacts/hbs_win-x86_dotnet.exe"
           commit: ${{ github.sha }}
-          tag: cli-v${{ env.PKG_VERSION }}
-          name: CLI v${{ env.PKG_VERSION }}
+          tag: v${{ env.PKG_VERSION }}
+          name: Version ${{ env.PKG_VERSION }}
           body: "<insert release notes here>"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
