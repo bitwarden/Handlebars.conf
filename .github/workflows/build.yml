@@ -59,7 +59,9 @@ jobs:
           cd $OUTPUT_DIR
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
+          ls -R
           mv -- "$FILENAME" "hbs_$RID$SUFFIX"
+          ls -R
 
       - name: Upload Self Contained artifact (${{ matrix.rid }})
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
@@ -83,7 +85,9 @@ jobs:
           cd $OUTPUT_DIR
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
+          ls -R
           mv -- "$FILENAME" "hbs_$RID_dotnet$SUFFIX"
+          ls -R
 
       - name: Upload Framework Dependent artifact (${{ matrix.rid }})
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
