@@ -1,6 +1,6 @@
 ---
 name: Release
-run-name: Release ${{ inputs.release_type }} v${{ inputs.release_version }}
+run-name: Release - ${{ inputs.release_type }}
 
 on:
   workflow_dispatch:
@@ -48,35 +48,32 @@ jobs:
           workflow_conclusion: success
           branch: ${{ github.ref_name }}
 
-      - name: List artifacts
-        run: ls -R artifacts/
-
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         env:
           PKG_VERSION: ${{ steps.version.outputs.version }}
         with:
-          artifacts: "artifacts/hbs_linux-arm,
-            artifacts/hbs_linux-arm64,
-            artifacts/hbs_linux-arm64_dotnet,
-            artifacts/hbs_linux-arm_dotnet,
-            artifacts/hbs_linux-musl-arm64,
-            artifacts/hbs_linux-musl-arm64_dotnet,
-            artifacts/hbs_linux-musl-x64,
-            artifacts/hbs_linux-musl-x64_dotnet,
-            artifacts/hbs_linux-x64,
-            artifacts/hbs_linux-x64_dotnet,
-            artifacts/hbs_osx-arm64,
-            artifacts/hbs_osx-arm64_dotnet,
-            artifacts/hbs_osx-x64,
-            artifacts/hbs_osx-x64_dotnet,
-            artifacts/hbs_win-arm64.exe,
-            artifacts/hbs_win-arm64_dotnet.exe,
-            artifacts/hbs_win-x64.exe,
-            artifacts/hbs_win-x64_dotnet.exe,
-            artifacts/hbs_win-x86.exe,
-            artifacts/hbs_win-x86_dotnet.exe"
+          artifacts: "artifacts/hbs_linux-arm.zip,
+            artifacts/hbs_linux-arm64.zip,
+            artifacts/hbs_linux-arm64_dotnet.zip,
+            artifacts/hbs_linux-arm_dotnet.zip,
+            artifacts/hbs_linux-musl-arm64.zip,
+            artifacts/hbs_linux-musl-arm64_dotnet.zip,
+            artifacts/hbs_linux-musl-x64.zip,
+            artifacts/hbs_linux-musl-x64_dotnet.zip,
+            artifacts/hbs_linux-x64.zip,
+            artifacts/hbs_linux-x64_dotnet.zip,
+            artifacts/hbs_osx-arm64.zip,
+            artifacts/hbs_osx-arm64_dotnet.zip,
+            artifacts/hbs_osx-x64.zip,
+            artifacts/hbs_osx-x64_dotnet.zip,
+            artifacts/hbs_win-arm64.zip,
+            artifacts/hbs_win-arm64_dotnet.zip,
+            artifacts/hbs_win-x64.zip,
+            artifacts/hbs_win-x64_dotnet.zip,
+            artifacts/hbs_win-x86.zip,
+            artifacts/hbs_win-x86_dotnet.zip"
           commit: ${{ github.sha }}
           tag: v${{ env.PKG_VERSION }}
           name: Version ${{ env.PKG_VERSION }}
