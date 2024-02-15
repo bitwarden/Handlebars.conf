@@ -78,7 +78,7 @@ jobs:
           dotnet publish -c Release -p:PublishDir=$OUTPUT_DIR -r $RID \
             -p:PublishReadyToRun=true -p:PublishSingleFile=true \
             -p:DebugType=None -p:DebugSymbols=false \
-            --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
+            --self-contained false -p:IncludeNativeLibrariesForSelfExtract=true
           cd $OUTPUT_DIR
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
