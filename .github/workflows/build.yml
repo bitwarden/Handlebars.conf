@@ -52,8 +52,6 @@ jobs:
           dotnet publish -c Release -r $RID --self-contained true -p:PublishDir=$OUTPUT_DIR -p:PublishReadyToRun=true \
           -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false \
           -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true
-          pwd
-          ls -R build
           cd $OUTPUT_DIR
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
@@ -77,8 +75,6 @@ jobs:
           echo "### Building framework dependent binary for $RID to $OUTPUT_DIR"
           dotnet publish -c Release -r $RID --self-contained false -p:PublishDir=$OUTPUT_DIR -p:PublishSingleFile=true \
           -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true
-          pwd
-          ls -R build
           cd $OUTPUT_DIR
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
