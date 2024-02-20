@@ -1,18 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>hbs</AssemblyName>
-    <Version>2024.2.0</Version>
+    <Version>2024.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Handlebars.Net" Version="2.1.4" />
-    <PackageReference Include="Handlebars.Net.Helpers" Version="2.4.1.4" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="YamlDotNet" Version="15.1.1" />
+    <PackageReference Include="Handlebars.Net" Version="2.1.4"/>
+    <PackageReference Include="Handlebars.Net.Helpers" Version="2.4.1.4"/>
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1"/>
+    <PackageReference Include="YamlDotNet" Version="15.1.1"/>
   </ItemGroup>
 
 </Project>
