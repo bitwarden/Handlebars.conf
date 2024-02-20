@@ -51,7 +51,7 @@ jobs:
           echo "### Building self contained binary for $RID to $OUTPUT_DIR"
           dotnet publish -c Release -p:PublishDir=$OUTPUT_DIR -r $RID \
             -p:PublishReadyToRun=true -p:PublishSingleFile=true \
-            -p:DebugType=None -p:DebugSymbols=false -p:PublishTrimmed=true \
+            -p:DebugType=None -p:DebugSymbols=false \
             --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true \
             -p:EnableCompressionInSingleFile=true
           cd $OUTPUT_DIR
