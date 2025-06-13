@@ -17,6 +17,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - name: Branch check
         if: ${{ inputs.release_type != 'Dry Run' }}
