@@ -100,7 +100,6 @@ jobs:
           fi
 
       - name: Log in to Azure
-        id: azure-login
         uses: bitwarden/gh-actions/azure-login@main
         if: failure()
         with:
