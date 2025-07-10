@@ -13,6 +13,9 @@ on:
           - Release
           - Dry Run
 
+permissions:
+  contents: read
+
 jobs:
   release:
     name: Release
