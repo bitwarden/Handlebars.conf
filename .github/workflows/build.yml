@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Print environment
         run: |
@@ -50,16 +52,16 @@ jobs:
         run: |
           OUTPUT_DIR="$(pwd)/build/sc/$RID"
           echo "### Building self contained binary for $RID to $OUTPUT_DIR"
-          dotnet publish -c Release -r $RID --self-contained true -p:PublishDir=$OUTPUT_DIR -p:PublishReadyToRun=true \
+          dotnet publish -c Release -r "$RID" --self-contained true -p:"PublishDir=$OUTPUT_DIR" -p:PublishReadyToRun=true \
           -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false \
           -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true
-          cd $OUTPUT_DIR
+          cd "$OUTPUT_DIR"
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
           NEW_FILENAME="hbs_${RID}${SUFFIX}"
           mv -- "$FILENAME" "$NEW_FILENAME"
-          zip -j hbs_${RID}.zip $NEW_FILENAME
-          rm $NEW_FILENAME
+          zip -j "hbs_${RID}.zip" "$NEW_FILENAME"
+          rm "$NEW_FILENAME"
 
       - name: Upload Self Contained artifact (${{ matrix.rid }})
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -74,15 +76,15 @@ jobs:
         run: |
           OUTPUT_DIR="$(pwd)/build/fd/$RID"
           echo "### Building framework dependent binary for $RID to $OUTPUT_DIR"
-          dotnet publish -c Release -r $RID --self-contained false -p:PublishDir=$OUTPUT_DIR -p:PublishSingleFile=true \
+          dotnet publish -c Release -r "$RID" --self-contained false -p:"PublishDir=$OUTPUT_DIR" -p:PublishSingleFile=true \
           -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true
-          cd $OUTPUT_DIR
+          cd "$OUTPUT_DIR"
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
           NEW_FILENAME="hbs_${RID}_dotnet${SUFFIX}"
           mv -- "$FILENAME" "$NEW_FILENAME"
-          zip -j hbs_${RID}_dotnet.zip $NEW_FILENAME
-          rm $NEW_FILENAME
+          zip -j "hbs_${RID}_dotnet.zip" "$NEW_FILENAME"
+          rm "$NEW_FILENAME"
 
       - name: Upload Framework Dependent artifact (${{ matrix.rid }})
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
