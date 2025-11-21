@@ -55,6 +55,28 @@ class Program
                     return 1;
                 }
 
+                // Validate configuration
+                if (config.Templates == null || config.Templates.Count == 0)
+                {
+                    Console.Error.WriteLine("Error: No templates defined in config file.");
+                    return 1;
+                }
+
+                foreach (var template in config.Templates)
+                {
+                    if (string.IsNullOrWhiteSpace(template.SourceFile) && string.IsNullOrWhiteSpace(template.SourceText))
+                    {
+                        Console.Error.WriteLine("Error: Template must have either 'src' (source file) or 'src_text' (inline text) defined.");
+                        return 1;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(template.Destination))
+                    {
+                        Console.Error.WriteLine("Error: Template must have 'dest' (destination) defined.");
+                        return 1;
+                    }
+                }
+
                 // Set up Handlebars
                 var handlebarsContext = HandlebarsDotNet.Handlebars.Create();
                 RegisterHandlebarsHelpers(handlebarsContext, config);
