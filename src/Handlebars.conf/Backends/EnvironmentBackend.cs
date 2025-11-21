@@ -4,7 +4,7 @@ namespace Handlebars.conf.Backends;
 
 internal class EnvironmentBackend : IBackend
 {
-    public void LoadBackend(Dictionary<string, object> model, Config config, Config.Template template)
+    public void LoadBackend(IDictionary<string, object> model, Config config, Config.Template template)
     {
         if (template.Keys == null)
         {
