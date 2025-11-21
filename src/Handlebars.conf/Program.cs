@@ -29,34 +29,70 @@ class Program
 
         rootCommand.SetAction(async (parseResult, cancellationToken) =>
         {
-            var configFile = parseResult.GetValue(configFileOption);
-            if (configFile == null)
+            try
             {
+                var configFile = parseResult.GetValue(configFileOption);
+                if (configFile == null)
+                {
+                    Console.Error.WriteLine("Error: Config file path is required.");
+                    return 1;
+                }
+
+                // Read config yaml file
+                Config config;
+                try
+                {
+                    config = await ReadConfigFileAsync(configFile);
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.Error.WriteLine($"Error: Config file not found: {configFile.FullName}");
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error reading config file: {ex.Message}");
+                    return 1;
+                }
+
+                // Set up Handlebars
+                var handlebarsContext = HandlebarsDotNet.Handlebars.Create();
+                RegisterHandlebarsHelpers(handlebarsContext, config);
+
+                // Process templates
+                if (config.Templates != null)
+                {
+                    foreach (var template in config.Templates)
+                    {
+                        try
+                        {
+                            var model = GetHandlebarsModel(config, template);
+                            var source = string.IsNullOrWhiteSpace(template.SourceText) ?
+                                await File.ReadAllTextAsync(template.SourceFile!) : template.SourceText;
+                            var sourceTemplate = handlebarsContext.Compile(source);
+                            var result = sourceTemplate(model);
+                            await File.WriteAllTextAsync(template.Destination!, result);
+                        }
+                        catch (FileNotFoundException ex)
+                        {
+                            Console.Error.WriteLine($"Error: Template file not found: {ex.FileName}");
+                            return 1;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Error.WriteLine($"Error processing template: {ex.Message}");
+                            return 1;
+                        }
+                    }
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Unexpected error: {ex.Message}");
                 return 1;
             }
-
-            // Read config yaml file
-            var config = await ReadConfigFileAsync(configFile);
-
-            // Set up Handlebars
-            var handlebarsContext = HandlebarsDotNet.Handlebars.Create();
-            RegisterHandlebarsHelpers(handlebarsContext, config);
-
-            // Process templates
-            if (config.Templates != null)
-            {
-                foreach (var template in config.Templates)
-                {
-                    var model = GetHandlebarsModel(config, template);
-                    var source = string.IsNullOrWhiteSpace(template.SourceText) ?
-                        await File.ReadAllTextAsync(template.SourceFile!) : template.SourceText;
-                    var sourceTemplate = handlebarsContext.Compile(source);
-                    var result = sourceTemplate(model);
-                    await File.WriteAllTextAsync(template.Destination!, result);
-                }
-            }
-
-            return 0;
         });
 
         // Go
