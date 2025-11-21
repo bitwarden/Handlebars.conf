@@ -15,17 +15,22 @@ class Program
     {
         // Set up command and parameters
         var configFileOption = new Option<FileInfo>(
-            name: "--config",
-            () => File.Exists("/etc/hbs/config.yml") ? new FileInfo("/etc/hbs/config.yml") :
-                new FileInfo("/etc/hbs/config.yaml"),
-            description: "The config file listing options and templates for Handlebars to process.");
-        configFileOption.AddAlias("-c");
+            "--config",
+            "-c")
+        {
+            Description = "The config file listing options and templates for Handlebars to process.",
+            DefaultValueFactory = _ => File.Exists("/etc/hbs/config.yml") ?
+                new FileInfo("/etc/hbs/config.yml") :
+                new FileInfo("/etc/hbs/config.yaml")
+        };
 
         var rootCommand = new RootCommand("Handlebars templates for config files.");
-        rootCommand.AddOption(configFileOption);
+        rootCommand.Options.Add(configFileOption);
 
-        rootCommand.SetHandler(async (configFile) =>
+        rootCommand.SetAction(async (parseResult, cancellationToken) =>
         {
+            var configFile = parseResult.GetValue(configFileOption);
+
             // Read config yaml file
             var config = await ReadConfigFileAsync(configFile);
 
@@ -43,10 +48,11 @@ class Program
                 var result = sourceTemplate(model);
                 await File.WriteAllTextAsync(template.Destination, result);
             }
-        }, configFileOption);
+        });
 
         // Go
-        return await rootCommand.InvokeAsync(args);
+        var result = rootCommand.Parse(args);
+        return await result.InvokeAsync();
     }
 
     static async Task<Config> ReadConfigFileAsync(FileInfo file)
