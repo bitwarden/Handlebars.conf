@@ -12,6 +12,8 @@ namespace Handlebars.conf;
 
 class Program
 {
+    private const string EnvModelKey = "env";
+
     static async Task<int> Main(string[] args)
     {
         // Set up logging
@@ -177,7 +179,7 @@ class Program
 
     static void AddEnvironmentVariablesToModel(IDictionary<string, object> model)
     {
-        model["env"] = EnvironmentHelper.GetLowercaseEnvironmentVariables();
+        model[EnvModelKey] = EnvironmentHelper.GetLowercaseEnvironmentVariables();
     }
 
     static void RegisterHandlebarsHelpers(IHandlebars context, Config config)
