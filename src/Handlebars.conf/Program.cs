@@ -42,7 +42,7 @@ class Program
                 Config config;
                 try
                 {
-                    config = await ReadConfigFileAsync(configFile);
+                    config = await ReadConfigFileAsync(configFile, cancellationToken);
                 }
                 catch (FileNotFoundException)
                 {
@@ -90,10 +90,10 @@ class Program
                         {
                             var model = GetHandlebarsModel(config, template);
                             var source = string.IsNullOrWhiteSpace(template.SourceText) ?
-                                await File.ReadAllTextAsync(template.SourceFile!) : template.SourceText;
+                                await File.ReadAllTextAsync(template.SourceFile!, cancellationToken) : template.SourceText;
                             var sourceTemplate = handlebarsContext.Compile(source);
                             var result = sourceTemplate(model);
-                            await File.WriteAllTextAsync(template.Destination!, result);
+                            await File.WriteAllTextAsync(template.Destination!, result, cancellationToken);
                         }
                         catch (FileNotFoundException ex)
                         {
@@ -122,9 +122,9 @@ class Program
         return await result.InvokeAsync();
     }
 
-    static async Task<Config> ReadConfigFileAsync(FileInfo file)
+    static async Task<Config> ReadConfigFileAsync(FileInfo file, CancellationToken cancellationToken = default)
     {
-        var yaml = await File.ReadAllTextAsync(file.FullName);
+        var yaml = await File.ReadAllTextAsync(file.FullName, cancellationToken);
         var deserializer = new DeserializerBuilder()
             .WithNamingConvention(UnderscoredNamingConvention.Instance)
             .Build();
