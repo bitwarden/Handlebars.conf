@@ -30,6 +30,10 @@ class Program
         rootCommand.SetAction(async (parseResult, cancellationToken) =>
         {
             var configFile = parseResult.GetValue(configFileOption);
+            if (configFile == null)
+            {
+                return 1;
+            }
 
             // Read config yaml file
             var config = await ReadConfigFileAsync(configFile);
@@ -39,15 +43,20 @@ class Program
             RegisterHandlebarsHelpers(handlebarsContext, config);
 
             // Process templates
-            foreach (var template in config.Templates)
+            if (config.Templates != null)
             {
-                var model = GetHandlebarsModel(config, template);
-                var source = string.IsNullOrWhiteSpace(template.SourceText) ?
-                    await File.ReadAllTextAsync(template.SourceFile) : template.SourceText;
-                var sourceTemplate = handlebarsContext.Compile(source);
-                var result = sourceTemplate(model);
-                await File.WriteAllTextAsync(template.Destination, result);
+                foreach (var template in config.Templates)
+                {
+                    var model = GetHandlebarsModel(config, template);
+                    var source = string.IsNullOrWhiteSpace(template.SourceText) ?
+                        await File.ReadAllTextAsync(template.SourceFile!) : template.SourceText;
+                    var sourceTemplate = handlebarsContext.Compile(source);
+                    var result = sourceTemplate(model);
+                    await File.WriteAllTextAsync(template.Destination!, result);
+                }
             }
+
+            return 0;
         });
 
         // Go
@@ -86,7 +95,7 @@ class Program
         var envTable = new Hashtable();
         foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
         {
-            envTable.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
+            envTable.Add(e.Key.ToString()!.ToLowerInvariant(), e.Value);
         }
         model["env"] = envTable;
     }
@@ -101,7 +110,7 @@ class Program
         }
     }
 
-    static IBackend ResolveBackend(BackendType backend)
+    static IBackend? ResolveBackend(BackendType backend)
     {
         return backend switch
         {
