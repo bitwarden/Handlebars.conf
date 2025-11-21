@@ -148,14 +148,7 @@ class Program
 
     static void AddEnvironmentVariablesToModel(IDictionary<string, object> model)
     {
-        // Need to lowercase all hash table key names due to bug here:
-        // https://github.com/Handlebars-Net/Handlebars.Net/issues/521
-        var envTable = new Hashtable();
-        foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
-        {
-            envTable.Add(e.Key.ToString()!.ToLowerInvariant(), e.Value);
-        }
-        model["env"] = envTable;
+        model["env"] = EnvironmentHelper.GetLowercaseEnvironmentVariables();
     }
 
     static void RegisterHandlebarsHelpers(IHandlebars context, Config config)

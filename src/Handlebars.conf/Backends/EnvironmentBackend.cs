@@ -11,11 +11,7 @@ internal class EnvironmentBackend : IBackend
             return;
         }
 
-        var envTable = new Hashtable();
-        foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
-        {
-            envTable.Add(e.Key.ToString()!.ToLowerInvariant(), e.Value);
-        }
+        var envTable = EnvironmentHelper.GetLowercaseEnvironmentVariables();
         foreach (var key in template.Keys)
         {
             var lowerKey = key?.ToLowerInvariant();
