@@ -10,10 +10,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Handlebars.conf;
 
+/// <summary>
+/// Main program class for Handlebars.conf application.
+/// </summary>
 class Program
 {
+    /// <summary>
+    /// Model key for environment variables in the Handlebars template.
+    /// </summary>
     private const string EnvModelKey = "env";
 
+    /// <summary>
+    /// Application entry point.
+    /// </summary>
+    /// <param name="args">Command-line arguments.</param>
+    /// <returns>Exit code (0 for success, 1 for error).</returns>
     static async Task<int> Main(string[] args)
     {
         // Set up logging
@@ -153,6 +164,12 @@ class Program
         return await result.InvokeAsync();
     }
 
+    /// <summary>
+    /// Reads and deserializes the configuration file.
+    /// </summary>
+    /// <param name="file">The configuration file to read.</param>
+    /// <param name="cancellationToken">Cancellation token for async operation.</param>
+    /// <returns>The deserialized configuration object.</returns>
     static async Task<Config> ReadConfigFileAsync(FileInfo file, CancellationToken cancellationToken = default)
     {
         var yaml = await File.ReadAllTextAsync(file.FullName, cancellationToken);
@@ -162,6 +179,12 @@ class Program
         return deserializer.Deserialize<Config>(yaml);
     }
 
+    /// <summary>
+    /// Builds the Handlebars model dictionary for a template.
+    /// </summary>
+    /// <param name="config">The application configuration.</param>
+    /// <param name="template">The template configuration.</param>
+    /// <returns>A dictionary containing the model data for the Handlebars template.</returns>
     static IDictionary<string, object> GetHandlebarsModel(Config config, Config.Template template)
     {
         var model = new Dictionary<string, object>();
@@ -177,11 +200,20 @@ class Program
         return model;
     }
 
+    /// <summary>
+    /// Adds environment variables to the Handlebars model.
+    /// </summary>
+    /// <param name="model">The model dictionary to add environment variables to.</param>
     static void AddEnvironmentVariablesToModel(IDictionary<string, object> model)
     {
         model[EnvModelKey] = EnvironmentHelper.GetLowercaseEnvironmentVariables();
     }
 
+    /// <summary>
+    /// Registers Handlebars helpers based on the configuration.
+    /// </summary>
+    /// <param name="context">The Handlebars context to register helpers with.</param>
+    /// <param name="config">The application configuration containing helper categories.</param>
     static void RegisterHandlebarsHelpers(IHandlebars context, Config config)
     {
         if (config.HelperCategories != null && config.HelperCategories.Length > 0)
@@ -192,6 +224,11 @@ class Program
         }
     }
 
+    /// <summary>
+    /// Resolves a backend implementation based on the backend type.
+    /// </summary>
+    /// <param name="backend">The backend type to resolve.</param>
+    /// <returns>An instance of the backend implementation, or null if not found.</returns>
     static IBackend? ResolveBackend(BackendType backend)
     {
         return backend switch
