@@ -64,7 +64,7 @@ jobs:
           rm "$NEW_FILENAME"
 
       - name: Upload Self Contained artifact (${{ matrix.rid }})
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: hbs_${{ matrix.rid }}
           path: build/sc/${{ matrix.rid }}
@@ -87,7 +87,7 @@ jobs:
           rm "$NEW_FILENAME"
 
       - name: Upload Framework Dependent artifact (${{ matrix.rid }})
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: hbs_${{ matrix.rid }}_dotnet
           path: build/fd/${{ matrix.rid }}
