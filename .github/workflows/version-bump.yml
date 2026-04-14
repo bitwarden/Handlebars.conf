@@ -26,12 +26,6 @@ jobs:
         with:
           version: ${{ inputs.version_number_override }}
 
-      - name: Checkout Branch
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-        with:
-          ref: main
-          persist-credentials: true
-
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
         with:
@@ -57,16 +51,18 @@ jobs:
           private-key: ${{ steps.retrieve-secret.outputs.BW-GHAPP-KEY }}
           owner: ${{ github.repository_owner }}
 
-      - name: Set up Git
-        run: |
-          git config --local user.email "178206702+bw-ghapp[bot]@users.noreply.github.com"
-          git config --local user.name "bw-ghapp[bot]"
+      - name: Checkout Branch
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          ref: main
+          persist-credentials: true
 
       - name: Create Version Branch
         id: create-branch
         run: |
           NAME=version_bump_${GITHUB_REF_NAME}_$(date +"%Y-%m-%d")
           git switch -c "$NAME"
+          git push -u origin "$NAME"
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
 
       - name: Install xmllint
@@ -149,15 +145,11 @@ jobs:
 
       - name: Commit files
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-        env:
-          _FINAL_VERSION: ${{ steps.set-final-version-output.outputs.version }}
-        run: git commit -m "Bumped version to ${_FINAL_VERSION}" -a
-
-      - name: Push changes
-        if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-        env:
-          PR_BRANCH: ${{ steps.create-branch.outputs.name }}
-        run: git push -u origin "$PR_BRANCH"
+        uses: bitwarden/gh-actions/api-commit@main
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: ${{ steps.create-branch.outputs.name }}
+          message: "Bumped version to ${{ steps.set-final-version-output.outputs.version }}"
 
       - name: Create Version PR
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
