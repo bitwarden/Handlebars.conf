@@ -3,15 +3,21 @@ name: Build
 on:
   pull_request:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build-self-contained:
     name: Build Self Contained Artifacts
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -32,19 +38,19 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+          cache: true
+          cache-dependency-path: src/Handlebars.conf/Handlebars.conf.csproj
+
       - name: Print environment
         run: |
           dotnet --info
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub ref name: $GITHUB_REF_NAME"
           echo "GitHub event: $GITHUB_EVENT_NAME"
-
-      - name: Restore/Clean service
-        run: |
-          echo "Restore"
-          dotnet restore
-          echo "Clean"
-          dotnet clean -c "Release"
       
       - name: Build Self Contained Binary
         env:
