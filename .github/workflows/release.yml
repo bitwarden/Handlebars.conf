@@ -60,26 +60,7 @@ jobs:
         env:
           PKG_VERSION: ${{ steps.version.outputs.version }}
         with:
-          artifacts: "artifacts/hbs_linux-arm.zip,
-            artifacts/hbs_linux-arm64.zip,
-            artifacts/hbs_linux-arm64_dotnet.zip,
-            artifacts/hbs_linux-arm_dotnet.zip,
-            artifacts/hbs_linux-musl-arm64.zip,
-            artifacts/hbs_linux-musl-arm64_dotnet.zip,
-            artifacts/hbs_linux-musl-x64.zip,
-            artifacts/hbs_linux-musl-x64_dotnet.zip,
-            artifacts/hbs_linux-x64.zip,
-            artifacts/hbs_linux-x64_dotnet.zip,
-            artifacts/hbs_osx-arm64.zip,
-            artifacts/hbs_osx-arm64_dotnet.zip,
-            artifacts/hbs_osx-x64.zip,
-            artifacts/hbs_osx-x64_dotnet.zip,
-            artifacts/hbs_win-arm64.zip,
-            artifacts/hbs_win-arm64_dotnet.zip,
-            artifacts/hbs_win-x64.zip,
-            artifacts/hbs_win-x64_dotnet.zip,
-            artifacts/hbs_win-x86.zip,
-            artifacts/hbs_win-x86_dotnet.zip"
+          artifacts: "artifacts/hbs_*.zip"
           commit: ${{ github.sha }}
           tag: v${{ env.PKG_VERSION }}
           name: Version ${{ env.PKG_VERSION }}
