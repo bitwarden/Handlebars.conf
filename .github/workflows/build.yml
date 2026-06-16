@@ -99,7 +99,7 @@ jobs:
           path: build/fd/${{ matrix.rid }}
           if-no-files-found: error
 
-      - name: Smoke test linux-x64 binaries
+      - name: Smoke test linux-x64 binaries against consumer fixtures
         if: matrix.rid == 'linux-x64'
         env:
           RID: ${{ matrix.rid }}
@@ -110,5 +110,5 @@ jobs:
             workdir=$(mktemp -d)
             unzip -j "build/${kind}/${RID}/${zip_name}" -d "$workdir"
             chmod +x "$workdir"/hbs_*
-            "$workdir"/hbs_* --help
+            HBS_BIN="$(ls "$workdir"/hbs_*)" ./test/run-fixtures.sh
           done

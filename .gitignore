@@ -207,3 +207,6 @@ project.lock.json
 **/CoverageOutput/
 .idea/
 **/**.swp
+
+# Test fixture build output
+test/fixtures/*/out/
