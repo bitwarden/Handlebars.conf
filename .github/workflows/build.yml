@@ -3,15 +3,21 @@ name: Build
 on:
   pull_request:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build-self-contained:
     name: Build Self Contained Artifacts
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -32,19 +38,19 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2 # v5.3.0
+        with:
+          dotnet-version: "10.0.x"
+          cache: true
+          cache-dependency-path: src/Handlebars.conf/Handlebars.conf.csproj
+
       - name: Print environment
         run: |
           dotnet --info
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub ref name: $GITHUB_REF_NAME"
           echo "GitHub event: $GITHUB_EVENT_NAME"
-
-      - name: Restore/Clean service
-        run: |
-          echo "Restore"
-          dotnet restore
-          echo "Clean"
-          dotnet clean -c "Release"
       
       - name: Build Self Contained Binary
         env:
@@ -92,3 +98,17 @@ jobs:
           name: hbs_${{ matrix.rid }}_dotnet
           path: build/fd/${{ matrix.rid }}
           if-no-files-found: error
+
+      - name: Smoke test linux-x64 binaries against consumer fixtures
+        if: matrix.rid == 'linux-x64'
+        env:
+          RID: ${{ matrix.rid }}
+        run: |
+          for kind in sc fd; do
+            zip_name="hbs_${RID}.zip"
+            [[ "$kind" == "fd" ]] && zip_name="hbs_${RID}_dotnet.zip"
+            workdir=$(mktemp -d)
+            unzip -j "build/${kind}/${RID}/${zip_name}" -d "$workdir"
+            chmod +x "$workdir"/hbs_*
+            HBS_BIN="$(ls "$workdir"/hbs_*)" ./test/run-fixtures.sh
+          done

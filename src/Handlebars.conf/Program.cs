@@ -37,8 +37,26 @@ class Program
             foreach (var template in config.Templates)
             {
                 var model = GetHandlebarsModel(config, template);
-                var source = string.IsNullOrWhiteSpace(template.SourceText) ?
-                    await File.ReadAllTextAsync(template.SourceFile) : template.SourceText;
+
+                string source;
+                if (!string.IsNullOrWhiteSpace(template.SourceText))
+                {
+                    source = template.SourceText;
+                }
+                else if (!string.IsNullOrWhiteSpace(template.SourceFile))
+                {
+                    source = await File.ReadAllTextAsync(template.SourceFile);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Template has neither 'src' nor 'src_text'.");
+                }
+
+                if (string.IsNullOrWhiteSpace(template.Destination))
+                {
+                    throw new InvalidOperationException("Template missing 'dest'.");
+                }
+
                 var sourceTemplate = handlebarsContext.Compile(source);
                 var result = sourceTemplate(model);
                 await File.WriteAllTextAsync(template.Destination, result);
@@ -80,7 +98,7 @@ class Program
         var envTable = new Hashtable();
         foreach (DictionaryEntry e in Environment.GetEnvironmentVariables())
         {
-            envTable.Add(e.Key.ToString().ToLowerInvariant(), e.Value);
+            envTable.Add(e.Key.ToString()!.ToLowerInvariant(), e.Value);
         }
         model["env"] = envTable;
     }
@@ -95,7 +113,7 @@ class Program
         }
     }
 
-    static IBackend ResolveBackend(BackendType backend)
+    static IBackend? ResolveBackend(BackendType backend)
     {
         return backend switch
         {

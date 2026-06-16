@@ -1,0 +1,5 @@
+helper_categories:
+  - String
+templates:
+  - src: nginx-config.hbs
+    dest: out/bitwarden.conf

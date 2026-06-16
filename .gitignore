@@ -205,5 +205,8 @@ project.lock.json
 .vscode/*
 **/.vscode/*
 **/CoverageOutput/
-.idea/*
+.idea/
 **/**.swp
+
+# Test fixture build output
+test/fixtures/*/out/

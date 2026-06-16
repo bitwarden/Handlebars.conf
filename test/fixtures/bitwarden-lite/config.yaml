@@ -1,0 +1,7 @@
+helper_categories:
+  - String
+templates:
+  - src: app-id.hbs
+    dest: out/app-id.json
+  - src: nginx-config.hbs
+    dest: out/bitwarden.conf
