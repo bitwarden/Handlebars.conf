@@ -83,7 +83,8 @@ jobs:
           OUTPUT_DIR="$(pwd)/build/fd/$RID"
           echo "### Building framework dependent binary for $RID to $OUTPUT_DIR"
           dotnet publish -c Release -r "$RID" --self-contained false -p:"PublishDir=$OUTPUT_DIR" -p:PublishSingleFile=true \
-          -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true \
+          -p:EnableCompressionInSingleFile=true
           cd "$OUTPUT_DIR"
           FILENAME=$(ls hbs*)
           SUFFIX=${FILENAME#hbs}
@@ -98,3 +99,17 @@ jobs:
           name: hbs_${{ matrix.rid }}_dotnet
           path: build/fd/${{ matrix.rid }}
           if-no-files-found: error
+
+      - name: Smoke test linux-x64 binaries
+        if: matrix.rid == 'linux-x64'
+        env:
+          RID: ${{ matrix.rid }}
+        run: |
+          for kind in sc fd; do
+            zip_name="hbs_${RID}.zip"
+            [[ "$kind" == "fd" ]] && zip_name="hbs_${RID}_dotnet.zip"
+            workdir=$(mktemp -d)
+            unzip -j "build/${kind}/${RID}/${zip_name}" -d "$workdir"
+            chmod +x "$workdir"/hbs_*
+            "$workdir"/hbs_* --help
+          done
